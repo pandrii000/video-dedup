@@ -30,9 +30,14 @@ def get_duplicates(videos_dir: Path) -> list[tuple[Path, Path, float]]:
     model = torch.nn.Sequential(*list(mobilenetv3.children())[:-1])
     model.eval()
 
+    # default transform for pretrained models from torchvision
     transform = torchvision.transforms.Compose([
         torchvision.transforms.Resize((224, 224)),
         torchvision.transforms.ToTensor(),
+        torchvision.transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225],
+        )
     ])
 
     videos = sorted(videos_dir.iterdir())
